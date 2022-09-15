@@ -8,7 +8,7 @@ local github_repo_name = "kong-plugin-google-recaptcha"
 local git_checkout = package_version == "dev" and "master" or package_version
 
 
-package = kong-google-recaptcha
+package = "kong-google-recaptcha"
 version = package_version .. "-" .. rockspec_revision
 supported_platforms = { "linux", "macosx" }
 source = {
