@@ -13,3 +13,6 @@ luacov.report.out
 .containerid
 
 .idea
+
+# kong auto generated logs
+compose/kong/logs/*.log

@@ -2,7 +2,10 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/../docker-kong/docker-kong.iml" filepath="$PROJECT_DIR$/../docker-kong/docker-kong.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/kong-plugin-google-recaptcha.iml" filepath="$PROJECT_DIR$/.idea/kong-plugin-google-recaptcha.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../kong-pongo/kong-pongo.iml" filepath="$PROJECT_DIR$/../kong-pongo/kong-pongo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/simple-api.iml" filepath="$PROJECT_DIR$/simple-api.iml" />
     </modules>
   </component>
 </project>
