@@ -14,3 +14,6 @@ paths:
         '200':
           description: |-
             200 response
+      x-kong-plugin-google-recaptcha:
+        name: google-recaptcha
+        enabled: true

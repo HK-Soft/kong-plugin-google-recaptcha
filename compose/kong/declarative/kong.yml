@@ -23,6 +23,6 @@ services:
             enabled: true
             tags:
               - OAS3_import
-              - OAS3file_api-with-example.yaml
+              - OAS3file_simple-api.yaml
               - api-example-v2
     tags: *a1
