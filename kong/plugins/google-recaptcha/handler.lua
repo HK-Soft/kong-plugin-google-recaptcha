@@ -12,6 +12,7 @@ local plugin = {
 -- https://docs.konghq.com/gateway/latest/plugin-development/pdk/
 local kong = kong
 
+kong.log("recaptcha plugin before", "recaptcha plugin before");
 -- runs in the 'access_by_lua_block'
 function plugin:access(plugin_conf)
 
