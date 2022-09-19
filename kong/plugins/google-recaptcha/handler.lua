@@ -14,8 +14,25 @@ local kong = kong
 
 function plugin:access(config)
   -- Implement logic for the access phase here (http)
-  kong.log.inspect(config.version)
-  kong.log.inspect(config.site_key)
+  kong.log.debug('starting the access process')
+  local site_key = config.site_key
+  local secret_key = config.secret_key
+
+  kong.log.debug('instancing recaptcha')
+  local recaptcha = require 'recaptcha'
+  local captcha   = recaptcha:new(site_key, secret_key)
+
+  local remote_ip = kong.client.get_ip()
+  local g_captcha_response = kong.request.get_header("g_captcha_response")
+
+  kong.log.inspect(site_key)
+  kong.log.inspect(secret_key)
+  kong.log.inspect(remote_ip)
+  kong.log.inspect(g_captcha_response)
+
+  if captcha.valid(g_captcha_response, remote_ip) then
+    kong.log.inspect('valid captcha')
+  end
 end
 
 -- return our plugin object

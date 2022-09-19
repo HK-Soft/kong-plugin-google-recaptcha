@@ -14,7 +14,7 @@ return {
             }
           },
           {
-            site_secret = {
+            secret_key = {
               type = "string",
               required = true,
             },
