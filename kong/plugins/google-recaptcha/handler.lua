@@ -16,64 +16,64 @@ kong.log("recaptcha plugin before", "recaptcha plugin before");
 
 function plugin:init_worker()
   -- Implement logic for the init_worker phase here (http/stream)
-  kong.log("init_worker")
+  kong.log.plugin("init_worker")
 end
 
 
 function plugin:preread(config)
   -- Implement logic for the preread phase here (stream)
-  kong.log("preread")
+  kong.log.plugin("preread")
 end
 
 
 function plugin:certificate(config)
   -- Implement logic for the certificate phase here (http/stream)
-  kong.log("certificate")
+  kong.log.plugin("certificate")
 end
 
 function plugin:rewrite(config)
   -- Implement logic for the rewrite phase here (http)
-  kong.log("rewrite")
+  kong.log.plugin("rewrite")
 end
 
 function plugin:access(config)
   -- Implement logic for the access phase here (http)
-  kong.log("access")
+  kong.log.plugin("access")
 end
 
 function plugin:ws_handshake(config)
   -- Implement logic for the WebSocket handshake here
-  kong.log("ws_handshake")
+  kong.log.plugin("ws_handshake")
 end
 
 function plugin:header_filter(config)
   -- Implement logic for the header_filter phase here (http)
-  kong.log("header_filter")
+  kong.log.plugin("header_filter")
 end
 
 function plugin:ws_client_frame(config)
   -- Implement logic for WebSocket client messages here
-  kong.log("ws_client_frame")
+  kong.log.plugin("ws_client_frame")
 end
 
 function plugin:ws_upstream_frame(config)
   -- Implement logic for WebSocket upstream messages here
-  kong.log("ws_upstream_frame")
+  kong.log.plugin("ws_upstream_frame")
 end
 
 function plugin:body_filter(config)
   -- Implement logic for the body_filter phase here (http)
-  kong.log("body_filter")
+  kong.log.plugin("body_filter")
 end
 
 function plugin:log(config)
   -- Implement logic for the log phase here (http/stream)
-  kong.log("log")
+  kong.log.plugin("log")
 end
 
 function plugin:ws_close(config)
   -- Implement logic for WebSocket post-connection here
-  kong.log("ws_close")
+  kong.log.plugin("ws_close")
 end
 
 

@@ -29,10 +29,11 @@ services:
       KONG_DECLARATIVE_CONFIG: /usr/local/kong/declarative/kong.yml
       KONG_PROXY_ACCESS_LOG: /dev/stdout
       KONG_PROXY_ERROR_LOG: /dev/stderr
+      KONG_LOG_LEVEL: debug
     volumes:
-      - ./compose/kong/logs:/usr/local/kong/logs
-      - ./compose/kong/logs/log.txt:/usr/local/kong/logs/log.txt
       - ./compose/kong/declarative:/usr/local/kong/declarative
+      # - ./compose/kong/logs:/usr/local/kong/logs
+      # - ./compose/kong/logs/log.txt:/usr/local/kong/logs/log.txt
       # - ./compose/kong/config/nginx.conf:/usr/local/kong/nginx.conf
       # - ./compose/kong/config/nginx-kong.conf:/usr/local/kong/nginx-kong.conf
     networks:
