@@ -14,7 +14,8 @@ local kong = kong
 
 function plugin:access(config)
   -- Implement logic for the access phase here (http)
-  kong.log.debug("access")
+  kong.log.inspect(config.version)
+  kong.log.inspect(config.site_key)
 end
 
 -- return our plugin object

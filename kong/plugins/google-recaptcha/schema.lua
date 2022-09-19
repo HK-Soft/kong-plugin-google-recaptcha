@@ -1,29 +1,37 @@
-local typedefs = require "kong.db.schema.typedefs"
-
-
 local PLUGIN_NAME = "google-recaptcha"
 
 return {
   name = PLUGIN_NAME,
   fields = {
     {
-      -- this plugin will only be applied to Services or Routes
-      consumer = typedefs.no_consumer
-    },
-    {
-      -- this plugin will only run within Nginx HTTP module
-      protocols = typedefs.protocols_http
-    },
-    {
       config = {
         type = "record",
         fields = {
           -- Describe your plugin's configuration's schema here.
+          site_key = {
+            type = "string",
+            required = true,
+          },
+          {
+            site_secret = {
+              type = "string",
+              default = true,
+            },
+          },
+          {
+            version = {
+              type = "string",
+              default = "v2",
+              one_of = {
+                "v2",
+                "v3",
+              },
+            },
+          },
         },
-      },
+      }
     },
   },
   entity_checks = {
-    -- Describe your plugin's entity validation rules
   },
 }
