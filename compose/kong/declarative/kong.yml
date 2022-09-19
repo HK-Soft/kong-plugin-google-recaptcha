@@ -1,16 +1,16 @@
 _format_version: "1.1"
 services:
   - name: Simple_API_overview
-    protocol: https
-    host: 632496ad5c1b435727abfdb0.mockapi.io
-    port: 443
+    protocol: http
+    host: simple-api-server
+    port: 4000
     path: /
     plugins: []
     routes:
       - tags:
           &a1
           - OAS3_import
-          - OAS3file_api-with-example.yaml
+          - OAS3file_simple-api.yaml
           - api-example-v2
         name: Simple_API_overview-getVersionDetailsv2
         methods:

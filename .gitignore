@@ -16,3 +16,6 @@ luacov.report.out
 
 # kong auto generated logs
 compose/kong/logs/*.log
+
+# express & node
+compose/simple-api-server/node_modules
