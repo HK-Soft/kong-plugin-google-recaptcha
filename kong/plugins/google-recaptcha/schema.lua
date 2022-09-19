@@ -7,10 +7,11 @@ return {
       config = {
         type = "record",
         fields = {
-          -- Describe your plugin's configuration's schema here.
-          site_key = {
-            type = "string",
-            required = true,
+          {
+            site_key = {
+              type = "string",
+              required = true,
+            }
           },
           {
             site_secret = {
@@ -29,9 +30,8 @@ return {
             },
           },
         },
-      }
-    },
-  },
-  entity_checks = {
+      },
+    }
   },
 }
+
