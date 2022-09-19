@@ -16,7 +16,7 @@ return {
           {
             site_secret = {
               type = "string",
-              default = true,
+              required = true,
             },
           },
           {
