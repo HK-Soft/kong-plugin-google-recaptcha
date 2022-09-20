@@ -19,3 +19,4 @@ compose/kong/logs/*.log
 
 # express & node
 compose/simple-api-server/node_modules
+/compose/kong/declarative/kong.yml

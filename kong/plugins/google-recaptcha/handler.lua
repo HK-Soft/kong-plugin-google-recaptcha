@@ -3,7 +3,7 @@
 
 --assert(ngx.get_phase() == "timer", "The world is coming to an end!")
 
-local recaptcha = require('recaptcha')
+local recaptcha = require "kong.plugins.google-recaptcha.recaptcha"
 
 local plugin = {
   PRIORITY = 1000, -- set the plugin priority, which determines plugin execution order
