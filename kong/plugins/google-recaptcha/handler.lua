@@ -3,6 +3,8 @@
 
 --assert(ngx.get_phase() == "timer", "The world is coming to an end!")
 
+local recaptcha = require('kong.plugins.google-recaptcha.recaptcha')
+
 local plugin = {
   PRIORITY = 1000, -- set the plugin priority, which determines plugin execution order
   VERSION = "0.1.0", -- version in X.Y.Z format. Check hybrid-mode compatibility requirements.
@@ -19,7 +21,6 @@ function plugin:access(config)
   local secret_key = config.secret_key
 
   kong.log.debug('instancing recaptcha')
-  local recaptcha = require 'recaptcha'
   local captcha   = recaptcha:new(site_key, secret_key)
 
   local remote_ip = kong.client.get_ip()
