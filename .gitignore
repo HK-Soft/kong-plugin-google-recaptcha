@@ -11,3 +11,11 @@ luacov.stats.out
 luacov.report.out
 # exclude Pongo containerid file
 .containerid
+
+.idea
+
+# kong auto generated logs
+compose/kong/logs/*.log
+
+# express & node
+compose/simple-api-server/node_modules
