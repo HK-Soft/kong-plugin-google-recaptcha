@@ -47,7 +47,7 @@ function valid(secret_key, api_server, g_captcha_res, remote_ip)
       ["Content-Length"] = string.len(request_body)
     },
     source = ltn12.source.string(request_body),
-    sink = ltn12.sink.table(response_body)
+    sink = response_body
   }
   response_body = json.decode(table.concat(response_body))
 
