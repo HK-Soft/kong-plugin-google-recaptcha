@@ -38,13 +38,12 @@ function valid(secret_key, api_server, g_captcha_res, remote_ip)
   local response_body = {}
 
   local res, code, response_headers = https.request {
-    url = api_server,
+    url = api_server..'?'..encoded_url,
     method = 'POST',
     headers = {
       ["Content-Type"] = "application/json",
       ["Content-Length"] = 0
     },
-    data = encoded_url,
     sink = ltn12.sink.table(response_body)
   }
   kong.log.inspect(response_headers)
