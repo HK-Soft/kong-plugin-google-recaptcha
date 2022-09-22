@@ -27,6 +27,11 @@ function valid(secret_key, api_server, g_captcha_res, remote_ip)
     return nil, 'Missing require remote_ip'
   end
 
+  local data = {
+    secret = secret_key,
+    response = g_captcha_res,
+    remoteip = remote_ip
+  }
   local encoded_url = encode_url(data)
   kong.log.inspect(encoded_url)
 
