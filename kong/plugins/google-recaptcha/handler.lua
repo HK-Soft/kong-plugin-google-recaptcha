@@ -77,7 +77,9 @@ function plugin:access(config)
   kong.log.inspect(g_captcha_response)
   kong.log.inspect(http)
 
-  valid(secret_key, g_captcha_response, remote_ip)
+  local v, m = valid(secret_key, g_captcha_response, remote_ip)
+  kong.log.inspect(v)
+  kong.log.inspect(m)
 
 end
 
