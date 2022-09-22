@@ -32,7 +32,7 @@ function valid(secret_key, api_server, g_captcha_res, remote_ip)
     response = g_captcha_res,
     remoteip = remote_ip
   }
-
+  kong.log.inspect({ status, errs, score, action })
   request_body = json.encode(request_body)
 
   local response_body = {}
