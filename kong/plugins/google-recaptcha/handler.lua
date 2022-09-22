@@ -48,6 +48,7 @@ function valid(secret_key, api_server, g_captcha_res, remote_ip)
   }
   kong.log.inspect(response_headers)
   kong.log.inspect(res)
+  kong.log.inspect(encoded_url)
   response_body = json.decode(table.concat(response_body))
 
   if not response_body and code ~= 200 then
