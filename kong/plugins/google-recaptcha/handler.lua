@@ -63,8 +63,8 @@ function plugin:access(config)
     api_server = kong.api_server
   end
 
-  local status, err, score, action = valid(config.secret_key, g_captcha_response, remote_ip)
-  kong.log.inspect({ status, err, score, action })
+  local status, errs, score, action = valid(config.secret_key, g_captcha_response, remote_ip)
+  kong.log.inspect({ status, errs, score, action })
 
 end
 
