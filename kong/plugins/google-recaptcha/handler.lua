@@ -10,10 +10,16 @@ local plugin = {
 -- kong global variable
 -- https://docs.konghq.com/gateway/latest/plugin-development/pdk/
 local kong = kong
-local api_server = 'https://www.google.com/recaptcha/api/siteverify'
 
-function valid(secret_key, g_captcha_res, remote_ip)
+function valid(secret_key, api_server, g_captcha_res, remote_ip)
 
+  if not secret_key then
+    return nil, 'Missing required secret key'
+  end
+
+  if not api_server then
+    return nil, 'Missing required api server'
+  end
   if not g_captcha_res then
     return nil, 'Missing required g-captcha-response'
   end
@@ -54,16 +60,26 @@ function valid(secret_key, g_captcha_res, remote_ip)
 end
 
 function plugin:access(config)
-  kong.log.debug(string.format("Validating a recaptcha secret :: %s for site key %s ", config.version, config.site_key))
+
+  kong.log.debug(
+    string.format(
+      "Validating a recaptcha secret :: version %s for site key %s at server %s using header name %s ",
+      config.version,
+      config.site_key,
+      config.api_server,
+      config.captcha_response_header
+    )
+  )
 
   local remote_ip = kong.client.get_ip()
-  local g_captcha_response = kong.request.get_header("g_captcha_response")
-  if kong.api_server then
-    kong.log.debug(string.format("Updating server api :: %s ", kong.api_server))
-    api_server = kong.api_server
-  end
+  local g_captcha_response = kong.request.get_header(config.captcha_response_header)
 
-  local status, errs, score, action = valid(config.secret_key, g_captcha_response, remote_ip)
+  local status, errs, score, action = valid(
+    config.secret_key,
+    config.api_server,
+    g_captcha_response,
+    remote_ip
+  )
   kong.log.inspect({ status, errs, score, action })
 
 end
