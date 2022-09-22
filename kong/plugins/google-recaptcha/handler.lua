@@ -58,7 +58,7 @@ function plugin:access(config)
 
   local remote_ip = kong.client.get_ip()
   local g_captcha_response = kong.request.get_header("g_captcha_response")
-  if not kong.api_server then
+  if kong.api_server then
     kong.log.debug(string.format("Updating server api :: %s ", kong.api_server))
     api_server = kong.api_server
   end
