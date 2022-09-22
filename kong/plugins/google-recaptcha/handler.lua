@@ -27,14 +27,8 @@ function valid(secret_key, api_server, g_captcha_res, remote_ip)
     return nil, 'Missing require remote_ip'
   end
 
-  local request_body = {
-    secret = secret_key,
-    response = g_captcha_res,
-    remoteip = remote_ip
-  }
-  request_body = json.encode(request_body)
-
-  kong.log.inspect(request_body)
+  local encoded_url = encode_url(data)
+  kong.log.inspect(encoded_url)
 
   local response_body = {}
 
@@ -42,10 +36,9 @@ function valid(secret_key, api_server, g_captcha_res, remote_ip)
     url = api_server,
     method = 'POST',
     headers = {
-      ["Content-Type"] = "application/json",
-      ["Content-Length"] = string.len(request_body)
+      ["Content-Type"] = "application/json"
     },
-    source = ltn12.source.string(request_body),
+    data = encoded_url,
     sink = ltn12.sink.table(response_body)
   }
   kong.log.inspect(response_headers)
@@ -60,6 +53,21 @@ function valid(secret_key, api_server, g_captcha_res, remote_ip)
   end
 
   return true, nil, response_body.score, response_body.action
+end
+
+-- encode string into escaped hexadecimal representation
+-- from socket.url implementation
+function m.escape(s)
+  return (string.gsub(s, "([^A-Za-z0-9_])", function(c)
+    return string.format("%%%02x", string.byte(c))
+  end))
+end
+
+-- encode url
+function m.encode_url(args)
+  local params = {}
+  for k, v in pairs(args) do table.insert(params, k .. '=' .. escape(v)) end
+  return table.concat(params, "&")
 end
 
 function plugin:access(config)
