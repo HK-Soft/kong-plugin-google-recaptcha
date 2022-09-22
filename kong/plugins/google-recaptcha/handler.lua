@@ -94,6 +94,7 @@ function plugin:access(config)
   -- if no captcha response in the headers try the body
   if not g_captcha_response then
     local body, _, _ = kong.request.get_body();
+    kong.log.inspect(body)
     g_captcha_response = body[tostring(config.captcha_response_name)]
   end
   kong.log.debug(
