@@ -37,7 +37,7 @@ function valid(secret_key, g_captcha_res, remote_ip)
   kong.log.inspect(request_body)
   local response_body = {}
 
-  local res, code, headers, status = https.request {
+  local _, code, _, _ = https.request {
     url = api_server,
     method = 'POST',
     headers = {
@@ -49,12 +49,14 @@ function valid(secret_key, g_captcha_res, remote_ip)
   }
   response_body = json.decode(table.concat(response_body))
 
-  kong.log.inspect(response_body)
-  kong.log.inspect({res, code, headers, status})
+  if not response_body and code ~= 200 then
+    return nil
+  end
+  if not response_body.success then
+    return false, response_body['error-codes']
+  end
 
-  if not response_body and code ~= 200 then return nil end
-  if not response_body.success then return false, response_body['error-codes'] end
-  return true
+  return true, response_body.score, response_body.action
 end
 
 function plugin:access(config)
@@ -72,9 +74,8 @@ function plugin:access(config)
   kong.log.inspect(g_captcha_response)
   kong.log.inspect(http)
 
-  local v, m = valid(secret_key, g_captcha_response, remote_ip)
-  kong.log.inspect(v)
-  kong.log.inspect(m)
+  local status, score, action = valid(secret_key, g_captcha_response, remote_ip)
+  kong.log.inspect({ status, score, action })
 
 end
 
