@@ -4,7 +4,7 @@
 --assert(ngx.get_phase() == "timer", "The world is coming to an end!")
 
 local http = require("socket.http")
-local ltn12 = require "ltn12"
+-- local ltn12 = require "ltn12"
 
 local plugin = {
   PRIORITY = 1000, -- set the plugin priority, which determines plugin execution order
@@ -37,12 +37,12 @@ function valid(secret_key, g_captcha_res, remote_ip)
   local res, code, headers, status = http.request {
     method = "POST",
     url = api_server,
-    source = ltn12.source.table(data),
+    -- source = ltn12.source.table(data),
     headers = {
       ["content-type"] = "text/plain",
       ["content-length"] = '7'
     },
-    sink = ltn12.sink.table(response)
+    -- sink = ltn12.sink.table(response)
   }
   print('inside recaptcha valid after requests.post')
   print(table.concat(response))
