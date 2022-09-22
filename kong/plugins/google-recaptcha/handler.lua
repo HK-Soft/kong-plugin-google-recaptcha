@@ -33,6 +33,8 @@ function valid(secret_key, g_captcha_res, remote_ip)
     remoteip = remote_ip
   }
   kong.log.inspect(request_body)
+  request_body = json.encode(request_body)
+  kong.log.inspect(request_body)
   local response_body = {}
 
   local r, c, h, s = https.request {
