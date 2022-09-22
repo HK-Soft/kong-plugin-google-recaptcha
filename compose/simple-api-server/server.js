@@ -9,7 +9,7 @@ app.set("port", process.env.PORT || 4000);
 const dataPath = './data/users.json'
 
 app.get('/api/v2/users', function (req, res) {
-    fs.readFile(dataPath, 'utf8',  (err, data) => {
+    fs.readFile(dataPath, 'utf8', (err, data) => {
         if (err) {
             console.log(err);
             throw err;
@@ -19,6 +19,13 @@ app.get('/api/v2/users', function (req, res) {
         res.send(JSON.parse(data));
         res.end();
     });
+})
+
+app.post('/api/v2/users', function (req, res) {
+    res.setHeader('content-type', 'application/json');
+    res.status(201);
+    res.send({message: 'User is saved'});
+    res.end();
 })
 
 
