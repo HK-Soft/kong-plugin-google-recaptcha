@@ -48,7 +48,7 @@ function valid(secret_key, g_captcha_res, remote_ip)
     sink = ltn12.sink.table(response_body)
   }
 
-  kong.log.inspect(request_body)
+  kong.log.inspect(response_body)
   kong.log.inspect(r)
   kong.log.inspect(c)
   kong.log.inspect(h)
