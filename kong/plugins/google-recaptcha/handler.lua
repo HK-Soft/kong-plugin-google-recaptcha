@@ -33,11 +33,10 @@ function valid(secret_key, api_server, g_captcha_res, remote_ip)
     remoteip = remote_ip
   }
   local encoded_url = encode_url(data)
-  kong.log.inspect(encoded_url)
 
   local response_body = {}
 
-  local res, code, response_headers = https.request {
+  local _, code, _ = https.request {
     url = api_server .. '?' .. encoded_url,
     method = 'POST',
     headers = {
@@ -46,9 +45,7 @@ function valid(secret_key, api_server, g_captcha_res, remote_ip)
     },
     sink = ltn12.sink.table(response_body)
   }
-  kong.log.inspect(response_headers)
-  kong.log.inspect(res)
-  kong.log.inspect(response_body)
+
   response_body = json.decode(table.concat(response_body))
 
   if not response_body and code ~= 200 then
@@ -96,7 +93,7 @@ function plugin:access(config)
   local g_captcha_response = kong.request.get_header(config.captcha_response_name)
   -- if no captcha response in the headers try the body
   if not g_captcha_response then
-    local body, _, _ = kong.request.get_body('application/json');
+    local body, _, _ = kong.request.get_body();
     g_captcha_response = body[tostring(config.captcha_response_name)]
   end
   kong.log.debug(
