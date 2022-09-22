@@ -25,7 +25,6 @@ description = {
 
 dependencies = {
     "luasocket",
-    "ltn12",
 }
 
 
