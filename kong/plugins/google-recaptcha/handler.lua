@@ -49,7 +49,7 @@ function valid(secret_key, g_captcha_res, remote_ip)
   }
   response_body = table.concat(response_body)
   local jsonResp = json.decode(response_body)
-  kong.long.inspect(jsonResp.success)
+  kong.log.inspect(jsonResp.success)
   kong.log.inspect(response_body)
   kong.log.inspect(response_body['success'])
   kong.log.inspect(response_body['error-codes'])
