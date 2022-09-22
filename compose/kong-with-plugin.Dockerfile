@@ -16,4 +16,4 @@ RUN apk add gcc
 RUN apk add musl-dev
 
 # Installing kong plugin as lua modules
-RUN luarocks install kong-google-recaptcha
+RUN luarocks install kong-plugin-google-recaptcha
