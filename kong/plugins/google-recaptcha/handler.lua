@@ -35,6 +35,7 @@ function valid(secret_key, api_server, g_captcha_res, remote_ip)
   request_body = json.encode(request_body)
 
   kong.log.inspect(request_body)
+  kong.log.inspect(ltn12.source.string(request_body))
 
   local response_body = {}
 
