@@ -37,7 +37,7 @@ function valid(secret_key, g_captcha_res, remote_ip)
   kong.log.inspect(request_body)
   local response_body = {}
 
-  local r, c, h, s = https.request {
+  local res, code, headers, status = https.request {
     url = api_server,
     method = 'POST',
     headers = {
@@ -52,12 +52,8 @@ function valid(secret_key, g_captcha_res, remote_ip)
   kong.log.inspect(jsonResp)
   kong.log.inspect(jsonResp["error-codes"])
   kong.log.inspect(jsonResp.success)
-  kong.log.inspect(response_body['success'])
-  kong.log.inspect(response_body['error-codes'])
-  kong.log.inspect(r)
-  kong.log.inspect(c)
-  kong.log.inspect(h)
-  kong.log.inspect(s)
+  kong.log.inspect({res, code, headers, status})
+
 
   return true
 end
