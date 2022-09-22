@@ -17,6 +17,7 @@ local api_server = 'https://www.google.com/recaptcha/api/siteverify'
 local kong = kong
 
 function valid(secret_key, g_captcha_res, remote_ip)
+  print('in the valid method')
   if not g_captcha_res then
     return nil, 'Missing required g-captcha-response'
   end
@@ -24,16 +25,17 @@ function valid(secret_key, g_captcha_res, remote_ip)
     return nil, 'Missing require remote_ip'
   end
 
-  kong.log.debug('inside recaptcha valid')
+  print('inside recaptcha valid')
   local data = {
     secret = secret_key,
     response = g_captcha_res,
     remoteip = remote_ip
   }
+  kong.log.inspect(data)
 
   local response = {}
 
-  kong.log.debug('inside recaptcha valid before requests.post')
+  print('inside recaptcha valid before requests.post')
   local res, code, headers, status = http.request {
     method = "POST",
     url = api_server,
@@ -44,17 +46,17 @@ function valid(secret_key, g_captcha_res, remote_ip)
     },
     -- sink = ltn12.sink.table(response)
   }
-  kong.log.debug('inside recaptcha valid after requests.post')
-  kong.log.debug(table.concat(response))
+  print('inside recaptcha valid after requests.post')
+  kong.log.inspect(table.concat(response))
 
-  kong.log.debug('res')
-  kong.log.debug(res)
-  kong.log.debug('code')
-  kong.log.debug(code)
-  kong.log.debug('header')
-  kong.log.debug(headers)
-  kong.log.debug('status')
-  kong.log.debug(status)
+  print('res')
+  kong.log.inspect(res)
+  print('code')
+  kong.log.inspect(code)
+  print('header')
+  kong.log.inspect(headers)
+  print('status')
+  kong.log.inspect(status)
 
   return true
 end
@@ -75,9 +77,8 @@ function plugin:access(config)
   kong.log.inspect(g_captcha_response)
   kong.log.inspect(http)
 
-  if valid(secret_key, g_captcha_response, remote_ip) then
-    kong.log.inspect('valid captcha')
-  end
+  valid(secret_key, g_captcha_response, remote_ip)
+
 end
 
 -- return our plugin object
