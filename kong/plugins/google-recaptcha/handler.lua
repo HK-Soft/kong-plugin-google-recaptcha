@@ -35,11 +35,10 @@ function valid(secret_key, api_server, g_captcha_res, remote_ip)
   request_body = json.encode(request_body)
 
   kong.log.inspect(request_body)
-  kong.log.inspect(ltn12.source.string(request_body))
 
   local response_body = {}
 
-  local _, code, _, _ = https.request {
+  local res, code, response_headers = https.request {
     url = api_server,
     method = 'POST',
     headers = {
@@ -47,8 +46,10 @@ function valid(secret_key, api_server, g_captcha_res, remote_ip)
       ["Content-Length"] = string.len(request_body)
     },
     source = ltn12.source.string(request_body),
-    sink = response_body
+    sink = ltn12.sink.table(response_body)
   }
+  kong.log.inspect(response_headers)
+  kong.log.inspect(res)
   response_body = json.decode(table.concat(response_body))
 
   if not response_body and code ~= 200 then
