@@ -73,6 +73,7 @@ function plugin:access(config)
 
   local remote_ip = kong.client.get_ip()
   local g_captcha_response = kong.request.get_header(config.captcha_response_header)
+  -- local version = config.version
 
   local status, errs, score, action = valid(
     config.secret_key,
@@ -81,6 +82,9 @@ function plugin:access(config)
     remote_ip
   )
   kong.log.inspect({ status, errs, score, action })
+  if (not status) then
+    return kong.response.error(403, [[{"message":"Access Forbidden"}]], { ["Content-Type"] = "application/json", })
+  end
 
 end
 
