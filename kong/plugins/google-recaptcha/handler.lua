@@ -24,7 +24,7 @@ function valid(secret_key, g_captcha_res, remote_ip)
     return nil, 'Missing require remote_ip'
   end
 
-  print('inside recaptcha valid')
+  kong.log.debug('inside recaptcha valid')
   local data = {
     secret = secret_key,
     response = g_captcha_res,
@@ -33,7 +33,7 @@ function valid(secret_key, g_captcha_res, remote_ip)
 
   local response = {}
 
-  print('inside recaptcha valid before requests.post')
+  kong.log.debug('inside recaptcha valid before requests.post')
   local res, code, headers, status = http.request {
     method = "POST",
     url = api_server,
@@ -44,17 +44,17 @@ function valid(secret_key, g_captcha_res, remote_ip)
     },
     -- sink = ltn12.sink.table(response)
   }
-  print('inside recaptcha valid after requests.post')
-  print(table.concat(response))
+  kong.log.debug('inside recaptcha valid after requests.post')
+  kong.log.debug(table.concat(response))
 
-  print('res')
-  print(res)
-  print('code')
-  print(code)
-  print('header')
-  print(headers)
-  print('status')
-  print(status)
+  kong.log.debug('res')
+  kong.log.debug(res)
+  kong.log.debug('code')
+  kong.log.debug(code)
+  kong.log.debug('header')
+  kong.log.debug(headers)
+  kong.log.debug('status')
+  kong.log.debug(status)
 
   return true
 end
