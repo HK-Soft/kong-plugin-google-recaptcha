@@ -73,6 +73,7 @@ function plugin:access(config)
   kong.log.inspect(secret_key)
   kong.log.inspect(remote_ip)
   kong.log.inspect(g_captcha_response)
+  kong.log.inspect(http)
 
   if valid(secret_key, g_captcha_response, remote_ip) then
     kong.log.inspect('valid captcha')
