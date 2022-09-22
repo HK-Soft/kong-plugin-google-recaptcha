@@ -41,7 +41,8 @@ function valid(secret_key, api_server, g_captcha_res, remote_ip)
     url = api_server,
     method = 'POST',
     headers = {
-      ["Content-Type"] = "application/json"
+      ["Content-Type"] = "application/json",
+      ["Content-Length"] = 0
     },
     data = encoded_url,
     sink = ltn12.sink.table(response_body)
