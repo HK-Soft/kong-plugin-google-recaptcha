@@ -24,6 +24,7 @@ description = {
 
 
 dependencies = {
+   "luasocket"
 }
 
 
