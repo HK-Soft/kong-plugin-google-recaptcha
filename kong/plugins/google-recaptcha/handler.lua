@@ -3,15 +3,15 @@
 
 --assert(ngx.get_phase() == "timer", "The world is coming to an end!")
 
-local http = require("socket.http")
--- local ltn12 = require "ltn12"
+local https = require "ssl.https"
+local ltn12 = require "ltn12"
+local json  = require "dkjson"
 
 local plugin = {
   PRIORITY = 1000, -- set the plugin priority, which determines plugin execution order
   VERSION = "0.1.0", -- version in X.Y.Z format. Check hybrid-mode compatibility requirements.
 }
 
-local api_server = 'https://www.google.com/recaptcha/api/siteverify'
 -- kong global variable
 -- https://docs.konghq.com/gateway/latest/plugin-development/pdk/
 local kong = kong
@@ -25,38 +25,32 @@ function valid(secret_key, g_captcha_res, remote_ip)
     return nil, 'Missing require remote_ip'
   end
 
-  print('inside recaptcha valid')
-  local data = {
+  local api_server = 'https://www.google.com/recaptcha/api/siteverify'
+  kong.log.inspect(api_server)
+  local request_body = {
     secret = secret_key,
     response = g_captcha_res,
     remoteip = remote_ip
   }
-  kong.log.inspect(data)
+  kong.log.inspect(request_body)
+  local response_body = {}
 
-  local response = {}
-
-  print('inside recaptcha valid before requests.post')
-  local res, code, headers, status = http.request {
-    method = "POST",
+  local r, c, h, s = https.request {
     url = api_server,
-    -- source = ltn12.source.table(data),
+    method = 'POST',
     headers = {
-      ["content-type"] = "text/plain",
-      ["content-length"] = '7'
+      ["Content-Type"] = "application/json",
+      ["Content-Length"] = string.len(request_body)
     },
-    -- sink = ltn12.sink.table(response)
+    source = ltn12.source.string(request_body),
+    sink = ltn12.sink.table(response_body)
   }
-  print('inside recaptcha valid after requests.post')
-  kong.log.inspect(table.concat(response))
 
-  print('res')
-  kong.log.inspect(res)
-  print('code')
-  kong.log.inspect(code)
-  print('header')
-  kong.log.inspect(headers)
-  print('status')
-  kong.log.inspect(status)
+  kong.log.inspect(request_body)
+  kong.log.inspect(r)
+  kong.log.inspect(c)
+  kong.log.inspect(h)
+  kong.log.inspect(s)
 
   return true
 end
@@ -66,7 +60,6 @@ function plugin:access(config)
   kong.log.debug('starting the access process')
   local site_key = config.site_key
   local secret_key = config.secret_key
-
 
   local remote_ip = kong.client.get_ip()
   local g_captcha_response = kong.request.get_header("g_captcha_response")
