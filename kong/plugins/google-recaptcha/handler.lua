@@ -1,23 +1,19 @@
--- If you're not sure your plugin is executing, uncomment the line below and restart Kong
--- then it will throw an error which indicates the plugin is being loaded at least.
-
---assert(ngx.get_phase() == "timer", "The world is coming to an end!")
-
 local https = require "ssl.https"
 local ltn12 = require "ltn12"
 local json = require "cjson"
 
 local plugin = {
-  PRIORITY = 1000, -- set the plugin priority, which determines plugin execution order
-  VERSION = "0.1.0", -- version in X.Y.Z format. Check hybrid-mode compatibility requirements.
+  PRIORITY = 1000,
+  VERSION = "0.1.0",
 }
 
 -- kong global variable
 -- https://docs.konghq.com/gateway/latest/plugin-development/pdk/
 local kong = kong
+local api_server = 'https://www.google.com/recaptcha/api/siteverify'
 
 function valid(secret_key, g_captcha_res, remote_ip)
-  print('in the valid method')
+
   if not g_captcha_res then
     return nil, 'Missing required g-captcha-response'
   end
@@ -25,16 +21,14 @@ function valid(secret_key, g_captcha_res, remote_ip)
     return nil, 'Missing require remote_ip'
   end
 
-  local api_server = 'https://www.google.com/recaptcha/api/siteverify'
-  kong.log.inspect(api_server)
   local request_body = {
     secret = secret_key,
     response = g_captcha_res,
     remoteip = remote_ip
   }
-  kong.log.inspect(request_body)
+
   request_body = json.encode(request_body)
-  kong.log.inspect(request_body)
+
   local response_body = {}
 
   local _, code, _, _ = https.request {
@@ -56,28 +50,22 @@ function valid(secret_key, g_captcha_res, remote_ip)
     return false, response_body['error-codes']
   end
 
-  return true, response_body.score, response_body.action
+  return true, nil, response_body.score, response_body.action
 end
 
 function plugin:access(config)
-  -- Implement logic for the access phase here (http)
-  kong.log.debug('starting the access process')
-  local site_key = config.site_key
-  local secret_key = config.secret_key
+  kong.log.debug(string.format("Validating a recaptcha secret :: %s for site key %s ", config.version, config.site_key))
 
   local remote_ip = kong.client.get_ip()
   local g_captcha_response = kong.request.get_header("g_captcha_response")
+  if not kong.api_server then
+    kong.log.debug(string.format("Updating server api :: %s ", kong.api_server))
+    api_server = kong.api_server
+  end
 
-  kong.log.inspect(site_key)
-  kong.log.inspect(secret_key)
-  kong.log.inspect(remote_ip)
-  kong.log.inspect(g_captcha_response)
-  kong.log.inspect(http)
-
-  local status, score, action = valid(secret_key, g_captcha_response, remote_ip)
-  kong.log.inspect({ status, score, action })
+  local status, err, score, action = valid(config.secret_key, g_captcha_response, remote_ip)
+  kong.log.inspect({ status, err, score, action })
 
 end
 
--- return our plugin object
 return plugin
