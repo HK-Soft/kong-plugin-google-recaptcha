@@ -39,7 +39,7 @@ return {
           {
             captcha_response_name = {
               type = "string",
-              default = "g_captcha_response",
+              default = "g-captcha-response",
               required = false,
             },
           },
