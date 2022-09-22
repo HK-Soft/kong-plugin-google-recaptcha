@@ -57,14 +57,14 @@ end
 
 -- encode string into escaped hexadecimal representation
 -- from socket.url implementation
-function m.escape(s)
+function escape(s)
   return (string.gsub(s, "([^A-Za-z0-9_])", function(c)
     return string.format("%%%02x", string.byte(c))
   end))
 end
 
 -- encode url
-function m.encode_url(args)
+function encode_url(args)
   local params = {}
   for k, v in pairs(args) do table.insert(params, k .. '=' .. escape(v)) end
   return table.concat(params, "&")
