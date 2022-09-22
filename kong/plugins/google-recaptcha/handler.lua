@@ -100,8 +100,8 @@ function plugin:access(config)
     kong.log.inspect(body)
     kong.log.inspect(mimetype)
     kong.log.inspect(err)
-    kong.log.inspect(body['g_captcha_response'])
-    g_captcha_response = body['g_captcha_response']
+    kong.log.inspect(body['g-captcha-response'])
+    g_captcha_response = body['g-captcha-response']
   end
   kong.log.debug(
     string.format("Validating a recaptcha secret :: retrieved captcha response %s ", g_captcha_response)
