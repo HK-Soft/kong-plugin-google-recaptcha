@@ -83,7 +83,7 @@ function plugin:access(config)
   )
   kong.log.inspect({ status, errs, score, action })
   if (not status) then
-    return kong.response.error(403, [[{"message":"Access Forbidden"}]], { ["Content-Type"] = "application/json", })
+    return kong.response.error(403, "Access Forbidden", { ["Content-Type"] = "application/json", })
   end
 
 end
