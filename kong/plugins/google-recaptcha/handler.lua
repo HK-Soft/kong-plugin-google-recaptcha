@@ -5,7 +5,7 @@
 
 local https = require "ssl.https"
 local ltn12 = require "ltn12"
-local json  = require "dkjson"
+local json = require "cjson"
 
 local plugin = {
   PRIORITY = 1000, -- set the plugin priority, which determines plugin execution order
