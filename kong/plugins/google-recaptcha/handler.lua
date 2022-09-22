@@ -98,7 +98,7 @@ function plugin:access(config)
   if not g_captcha_response then
     local body, _, _ = kong.request.get_body();
     kong.log.inspect(body)
-    g_captcha_response = body.g_captcha_response
+    g_captcha_response = body['config.captcha_response_name']
   end
   kong.log.debug(
     string.format("Validating a recaptcha secret :: retrieved captcha response %s ", g_captcha_response)
