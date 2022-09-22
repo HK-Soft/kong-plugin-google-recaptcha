@@ -38,7 +38,7 @@ function valid(secret_key, api_server, g_captcha_res, remote_ip)
   local response_body = {}
 
   local res, code, response_headers = https.request {
-    url = api_server..'?'..encoded_url,
+    url = api_server .. '?' .. encoded_url,
     method = 'POST',
     headers = {
       ["Content-Type"] = "application/json",
@@ -72,7 +72,9 @@ end
 -- encode url
 function encode_url(args)
   local params = {}
-  for k, v in pairs(args) do table.insert(params, k .. '=' .. escape(v)) end
+  for k, v in pairs(args) do
+    table.insert(params, k .. '=' .. escape(v))
+  end
   return table.concat(params, "&")
 end
 
@@ -84,13 +86,22 @@ function plugin:access(config)
       config.version,
       config.site_key,
       config.api_server,
-      config.captcha_response_header
+      config.captcha_response_name
     )
   )
-
+  -- get the client ip address
   local remote_ip = kong.client.get_ip()
-  local g_captcha_response = kong.request.get_header(config.captcha_response_header)
-  -- local version = config.version
+
+  -- try to get the captcha response from the headers
+  local g_captcha_response = kong.request.get_header(config.captcha_response_name)
+  -- if no captcha response in the headers try the body
+  if not g_captcha_response then
+    local body, _, _ = kong.request.get_body();
+    g_captcha_response = body.g_captcha_response
+  end
+  kong.log.debug(
+    string.format("Validating a recaptcha secret :: retrieved captcha response %s ", g_captcha_response)
+  )
 
   local status, errs, score, action = valid(
     config.secret_key,
