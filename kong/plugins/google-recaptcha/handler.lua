@@ -96,12 +96,9 @@ function plugin:access(config)
   local g_captcha_response = kong.request.get_header(config.captcha_response_name)
   -- if no captcha response in the headers try the body
   if not g_captcha_response then
-    local body, err, mimetype  = kong.request.get_body('application/json');
-    kong.log.inspect(body)
-    kong.log.inspect(mimetype)
-    kong.log.inspect(err)
-    kong.log.inspect(body['g-captcha-response'])
-    g_captcha_response = body['g-captcha-response']
+    local body, _, _ = kong.request.get_body('application/json');
+    kong.log.inspect(body[config.captcha_response_name])
+    g_captcha_response = body[config.captcha_response_name]
   end
   kong.log.debug(
     string.format("Validating a recaptcha secret :: retrieved captcha response %s ", g_captcha_response)
