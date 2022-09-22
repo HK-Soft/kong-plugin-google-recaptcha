@@ -47,14 +47,13 @@ function valid(secret_key, g_captcha_res, remote_ip)
     source = ltn12.source.string(request_body),
     sink = ltn12.sink.table(response_body)
   }
-  response_body = table.concat(response_body)
-  local jsonResp = json.decode(response_body)
-  kong.log.inspect(jsonResp)
-  kong.log.inspect(jsonResp["error-codes"])
-  kong.log.inspect(jsonResp.success)
+  response_body = json.decode(table.concat(response_body))
+
+  kong.log.inspect(response_body)
   kong.log.inspect({res, code, headers, status})
 
-
+  if not response_body and code ~= 200 then return nil end
+  if not response_body.success then return false, response_body['error-codes'] end
   return true
 end
 
