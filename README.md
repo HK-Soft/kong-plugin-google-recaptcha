@@ -1,71 +1,157 @@
-[![Build Status][badge-travis-image]][badge-travis-url]
+# Kong plugin google recaptcha validation
 
-Kong plugin template
-====================
+A kong plugin that handle googles recaptcha validation.
 
-This repository contains a very simple Kong plugin template to get you
-up and running quickly for developing your own plugins.
+### Description
 
-This template was designed to work with the
-[`kong-pongo`](https://github.com/Kong/kong-pongo) and
-[`kong-vagrant`](https://github.com/Kong/kong-vagrant) development environments.
+By adding this plugin to kong route or service this plugins will automatcally extract the google recaptcha response from
+the request header or boyd then calls google validation endpoint. then depending on the validation status either
+forward the call to the upstream or return a 403 to the client.
 
-Please check out those repos `README` files for usage instructions. For a complete
-walkthrough check [this blogpost on the Kong website](https://konghq.com/blog/custom-lua-plugin-kong-gateway).
+## Getting Started
 
+### Dependencies
 
-Naming and versioning conventions
-=================================
+* This plugin is written on lua version 5.1 or higher.
+* luasec (version )
+* luasocket (verion )
+* lua-cjson (verion )
 
-There are a number "named" components and related versions. These are the conventions:
+### Installing
 
-* *Kong plugin name*: This is the name of the plugin as it is shown in the Kong
-  Manager GUI, and the name used in the file system. A plugin named `my-cool-plugin`
-  would have a `handler.lua` file at `./kong/plugins/my-cool-plugin/handler.lua`.
+This plugin is provided as luarckes module :
 
-* *Kong plugin version*: This is the version of the plugin code, expressed in
-  `x.y.z` format (using Semantic Versioning is recommended). This version should
-  be set in the `handler.lua` file as the `VERSION` property on the plugin table.
+```shell
+luarocks install kong-plugin-google-recaptcha
+```
 
-* *LuaRocks package name*: This is the name used in the LuaRocks eco system.
-  By convention this is `kong-plugin-[KongPluginName]`. This name is used
-  for the `rockspec` file, both in the filename as well as in the contents
-  (LuaRocks requires that they match).
+To add this plugin to kong
+check : [(un)Installing costume kong plugin ](https://docs.konghq.com/gateway/latest/plugin-development/distribution/)
 
-* *LuaRocks package version*: This is the version of the package, and by convention
-  it should be identical to the *Kong plugin version*. As with the *LuaRocks package
-  name* the version is used in the `rockspec` file, both in the filename as well
-  as in the contents (LuaRocks requires that they match).
+## plugin configuration
 
-* *LuaRocks rockspec revision*: This is the revision of the rockspec, and it only
-  changes if the rockspec is updated. So when the source code remains the same,
-  but build instructions change for example. When there is a new *LuaRocks package
-  version* the *LuaRocks rockspec revision* is reset to `1`. As with the *LuaRocks
-  package name* the revision is used in the `rockspec` file, both in the filename
-  as well as in the contents (LuaRocks requires that they match).
+this plugin can be configured on routes level, service level or globally
 
-* *LuaRocks rockspec name*: this is the filename of the rockspec. This is the file
-  that contains the meta-data and build instructions for the LuaRocks package.
-  The filename is `[package name]-[package version]-[package revision].rockspec`.
+### example
 
-Example
--------
+**Example to configure google recaptcha V2**
 
-* *Kong plugin name*: `my-cool-plugin`
+Enable on a service
 
-* *Kong plugin version*: `1.4.2` (set in the `VERSION` field inside `handler.lua`)
+```yaml
+plugins:
+  - name: google-recaptcha
+    service: SERVICE_NAME
+    config:
+      site_key: the_google_recaptcha_site_key
+      secret_key: the_google_recaptcha_site_secret
+```
 
-This results in:
+Enable on a route
 
-* *LuaRocks package name*: `kong-plugin-my-cool-plugin`
+```yaml
+plugins:
+  - name: google-recaptcha
+    route: ROUTE_NAME
+    config:
+      site_key: the_google_recaptcha_site_key
+      secret_key: the_google_recaptcha_site_secret
+```
 
-* *LuaRocks package version*: `1.4.2`
+Enable globally
 
-* *LuaRocks rockspec revision*: `1`
+```yaml
+plugins:
+  - name: google-recaptcha
+    route: ROUTE_NAME
+    config:
+      site_key: the_google_recaptcha_site_key
+      secret_key: the_google_recaptcha_site_secret
+```
 
-* *rockspec file*: `kong-plugin-my-cool-plugin-1.4.2-1.rockspec`
+### Parameters
 
-* File *`handler.lua`* is located at: `./kong/plugins/my-cool-plugin/handler.lua` (and similar for the other plugin files)
+| Form Parameter               | Type                                | Description                                                                                                   |
+|------------------------------|-------------------------------------|---------------------------------------------------------------------------------------------------------------|
+| name `required`              | Type: `string`                      | The name of the plugin, in this case google-recaptcha .                                                       |
+| config.site_key              | Type: `string`                      | The site key as provided by google recaptcha                                                                  |
+| config.secret_key            | Type: `string`                      | The site secret key as provided by google recaptcha                                                           |                                                      |
+| config.version               | Type: `string` can be only v2 or v3 | the recaptcha version (only V2 checkbox and V3 are supported (default to `V2`)                                |
+| config.api_server            | Type: `string`                      | the endpoint to validate the response (default to : `https://www.google.com/recaptcha/api/siteverify`)        |
+| config.captcha_response_name | Type: `string`                      | the header or body attribute name used to hold the captcha response value (default to `g-recaptcha-response`) |
 
-[badge-travis-url]: https://travis-ci.org/Kong/kong-plugin/branches
-[badge-travis-image]: https://travis-ci.com/Kong/kong-plugin.svg?branch=master
+> **_NOTE:_**  This plugin will search for the recaptcha response in the request header named as configured in the
+> parameter `config.captcha_response_name` if note found it will check the body for an attribute with the same name if
+> not
+> provided neither in the headers nor the body the validation will fail
+
+### How to run example locally
+
+To run testing environment locally, run the following command (you will need docker, docker compose and of course git)
+
+#### Step 01
+
+```shell
+git clone https://github.com/HK-Soft/kong-plugin-google-recaptcha.git
+```
+
+```shell
+cd kong-plugin-google-recaptcha
+```
+
+#### Step 02
+
+Add your site-key and secret-key to `simple-api.yaml`
+
+replace the attribute `data-sitekey` in /spec/google-recaptcha-test.html with your site-key
+
+#### step 03
+
+```shell
+docker compose build --no-cache
+```
+
+```shell
+docker compose up --forec-recreate
+```
+
+#### step 04
+
+open /spec/google-recaptcha-test.html in your browser and submit the form, you can also use postman to call the
+endpoints just don't forget to add the header or an attribute in the body named  `g-recaptcha-response`
+
+- A kong container will be started at **localhost:8001**
+
+- A node mock service will be started at **localhost:4000**
+
+- This kong container will be configured with the following routes protected with the Google recaptcha
+    - GET: /api/v2/users
+    - POS: /api/v2/users
+
+## Links
+
+[Kong Develop Custom Plugins](https://docs.konghq.com/gateway/latest/plugin-development/)
+
+[Plugin Development Kit](https://docs.konghq.com/gateway/3.0.x/plugin-development/pdk/)
+
+[Google recaptcha](https://www.google.com/recaptcha/admin)
+
+[Google recaptcha Enterprise](https://console.cloud.google.com/marketplace/product/google/recaptchaenterprise.googleapis.com)
+
+## Help
+
+Want to improve this project? Create a pull request with detailed changes / improvements! If approved you will be added
+to the list of authors of this awesome project!
+
+## Authors
+
+* Abdeldjalil [HK-Soft](https://github.com/HK-Soft)
+
+## Version History
+
+## License
+
+## Acknowledgments
+
+Special thanks to Jeffry L [paragasu](https://github.com/paragasu) [lua-recaptcha](https://github.com/paragasu/lua-recaptcha)
+
