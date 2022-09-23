@@ -4,7 +4,7 @@ A kong plugin that handle googles recaptcha validation.
 
 ### Description
 
-By adding this plugin to kong route or service this plugins will automatcally extract the google recaptcha response from
+By adding this plugin to kong route or service this plugins will automatically extract the google recaptcha response from
 the request header or boyd then calls google validation endpoint. then depending on the validation status either
 forward the call to the upstream or return a 403 to the client.
 
@@ -19,7 +19,7 @@ forward the call to the upstream or return a 403 to the client.
 
 ### Installing
 
-This plugin is provided as luarckes module :
+This plugin is provided as luarocks module :
 
 ```shell
 luarocks install kong-plugin-google-recaptcha
@@ -71,14 +71,14 @@ plugins:
 
 ### Parameters
 
-| Form Parameter               | Type                                | Description                                                                                                   |
-|------------------------------|-------------------------------------|---------------------------------------------------------------------------------------------------------------|
-| name `required`              | Type: `string`                      | The name of the plugin, in this case google-recaptcha .                                                       |
-| config.site_key              | Type: `string`                      | The site key as provided by google recaptcha                                                                  |
-| config.secret_key            | Type: `string`                      | The site secret key as provided by google recaptcha                                                           |                                                      |
-| config.version               | Type: `string` can be only v2 or v3 | the recaptcha version (only V2 checkbox and V3 are supported (default to `V2`)                                |
-| config.api_server            | Type: `string`                      | the endpoint to validate the response (default to : `https://www.google.com/recaptcha/api/siteverify`)        |
-| config.captcha_response_name | Type: `string`                      | the header or body attribute name used to hold the captcha response value (default to `g-recaptcha-response`) |
+| Form Parameter                           | Type                                      | Description                                                                                                   |
+|------------------------------------------|-------------------------------------------|---------------------------------------------------------------------------------------------------------------|
+| name `required`                          | Type: `string`                            | The name of the plugin, in this case google-recaptcha .                                                       |
+| config.site_key `required`               | Type: `string`                            | The site key as provided by google recaptcha                                                                  |
+| config.secret_key `required`             | Type: `string`                            | The site secret key as provided by google recaptcha                                                           |                                                      |
+| config.version `optional`                | Type: `string` <br/> can be only v2 or v3 | the recaptcha version (only V2 checkbox and V3 are supported (default to `V2`)                                |
+| config.api_server  `optional`            | Type: `string`                            | the endpoint to validate the response (default to : `https://www.google.com/recaptcha/api/siteverify`)        |
+| config.captcha_response_name `optional`  | Type: `string`                            | the header or body attribute name used to hold the captcha response value (default to `g-recaptcha-response`) |
 
 > **_NOTE:_**  This plugin will search for the recaptcha response in the request header named as configured in the
 > parameter `config.captcha_response_name` if note found it will check the body for an attribute with the same name if
@@ -148,6 +148,15 @@ to the list of authors of this awesome project!
 * Abdeldjalil [HK-Soft](https://github.com/HK-Soft)
 
 ## Version History
+
+* 0.1.0
+  * support checkbox V2 recaptcha
+  * support recaptcha on route level
+  * support sending response in headers or body
+  * support customizing the header name holding the recaptcha response
+  * support customizing the body attribute name holding the recaptcha response
+  * support V3 recaptcha (experimental)
+  * support recaptcha on service or globally (experimental)
 
 ## License
 
