@@ -29,9 +29,23 @@ return {
               },
             },
           },
+          {
+            api_server = {
+              type = "string",
+              default = "https://www.google.com/recaptcha/api/siteverify",
+              required = false,
+            },
+          },
+          {
+            captcha_response_name = {
+              type = "string",
+              default = "g-recaptcha-response",
+              required = false,
+            },
+          },
         },
       },
-    }
+    },
   },
 }
 
