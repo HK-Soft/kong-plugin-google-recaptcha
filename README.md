@@ -126,7 +126,7 @@ endpoints just don't forget to add the header or an attribute in the body named 
 
 - This kong container will be configured with the following routes protected with the Google recaptcha
     - GET: /api/v2/users
-    - POS: /api/v2/users
+    - POST: /api/v2/users
 
 ## Links
 
