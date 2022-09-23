@@ -71,14 +71,14 @@ plugins:
 
 ### Parameters
 
-| Form Parameter                           | Type                                      | Description                                                                                                   |
-|------------------------------------------|-------------------------------------------|---------------------------------------------------------------------------------------------------------------|
-| name `required`                          | Type: `string`                            | The name of the plugin, in this case google-recaptcha .                                                       |
-| config.site_key `required`               | Type: `string`                            | The site key as provided by google recaptcha                                                                  |
-| config.secret_key `required`             | Type: `string`                            | The site secret key as provided by google recaptcha                                                           |                                                      |
-| config.version `optional`                | Type: `string` <br/> can be only v2 or v3 | the recaptcha version (only V2 checkbox and V3 are supported (default to `V2`)                                |
-| config.api_server  `optional`            | Type: `string`                            | the endpoint to validate the response (default to : `https://www.google.com/recaptcha/api/siteverify`)        |
-| config.captcha_response_name `optional`  | Type: `string`                            | the header or body attribute name used to hold the captcha response value (default to `g-recaptcha-response`) |
+| Form Parameter                                  | Type                                | Description                                                                                                     |
+|-------------------------------------------------|-------------------------------------|-----------------------------------------------------------------------------------------------------------------|
+| name <br/>  `required`                          | `string`                            | The name of the plugin, in this case google-recaptcha .                                                         |
+| config.site_key <br/>  `required`               | `string`                            | The site key as provided by google recaptcha                                                                    |
+| config.secret_key <br/>  `required`             | `string`                            | The site secret key as provided by google recaptcha                                                             |                                                      |
+| config.version <br/>  `optional`                | `string` <br/> can be only v2 or v3 | the recaptcha version (only V2 checkbox and V3 are supported  <br/> default: `V2`                               |
+| config.api_server <br/>   `optional`            | `string`                            | the endpoint to validate the response  <br/> default: `https://www.google.com/recaptcha/api/siteverify`         |
+| config.captcha_response_name <br/>   `optional` | `string`                            | the header or body attribute name used to hold the captcha response value <br/> default: `g-recaptcha-response` |
 
 > **_NOTE:_**  This plugin will search for the recaptcha response in the request header named as configured in the
 > parameter `config.captcha_response_name` if note found it will check the body for an attribute with the same name if
