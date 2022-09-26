@@ -158,7 +158,7 @@ to the list of authors of this awesome project!
   * support sending response in headers or body
   * support customizing the header name holding the recaptcha response
   * support customizing the body attribute name holding the recaptcha response
-  * support V3 recaptcha (experimental)
+  * support V3 recaptcha
   * support recaptcha on service or globally (experimental)
 
 ## License
