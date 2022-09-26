@@ -30,6 +30,16 @@ return {
             },
           },
           {
+            score_threshold = {
+              type = "number",
+              default = 0.8,
+              between = {
+                0,
+                1
+              },
+            },
+          },
+          {
             api_server = {
               type = "string",
               default = "https://www.google.com/recaptcha/api/siteverify",

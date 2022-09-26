@@ -110,6 +110,10 @@ function plugin:access(config)
   )
   kong.log.inspect({ status, errs, score, action })
   if (not status) then
+    kong.log.debug("Invalidate recaptcha response")
+    return kong.response.error(403, "Access Forbidden", { ["Content-Type"] = "application/json", })
+  elseif (config.version == "V3" and not config.score_threshold and score < config.score_threshold) then
+    kong.log.debug("Invalidate recaptcha score value")
     return kong.response.error(403, "Access Forbidden", { ["Content-Type"] = "application/json", })
   end
 
