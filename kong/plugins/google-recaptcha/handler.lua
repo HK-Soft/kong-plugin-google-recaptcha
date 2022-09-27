@@ -94,8 +94,9 @@ function plugin:access(config)
   -- if no captcha response in the headers try the body
   if not g_captcha_response then
     local body, _, _ = kong.request.get_body();
-    kong.log.inspect(body)
-    g_captcha_response = body[tostring(config.captcha_response_name)]
+    if body then
+      g_captcha_response = body[tostring(config.captcha_response_name)]
+    end
   end
   kong.log.debug(
     string.format("Validating a recaptcha secret :: retrieved captcha response %s ", g_captcha_response)
@@ -109,6 +110,10 @@ function plugin:access(config)
   )
   kong.log.inspect({ status, errs, score, action })
   if (not status) then
+    kong.log.debug("Invalidate recaptcha response")
+    return kong.response.error(403, "Access Forbidden", { ["Content-Type"] = "application/json", })
+  elseif (config.version == "V3" and not config.score_threshold and score < config.score_threshold) then
+    kong.log.debug("Invalidate recaptcha score value")
     return kong.response.error(403, "Access Forbidden", { ["Content-Type"] = "application/json", })
   end
 

@@ -106,14 +106,17 @@ Add your site-key and secret-key to `simple-api.yaml`
 replace the attribute `data-sitekey` in /spec/google-recaptcha-test.html with your site-key
 
 #### step 03
-
+build docker images (kong + node mock service)
 ```shell
 docker compose build --no-cache
 ```
 
+Run docker images (insomnia declarative configs generation + kong + node mock service)
 ```shell
-docker compose up --forec-recreate
+docker compose up --force-recreate
 ```
+
+Note: every time we run this two commands we build new images to avoid contamination between different executions
 
 #### step 04
 
@@ -155,7 +158,7 @@ to the list of authors of this awesome project!
   * support sending response in headers or body
   * support customizing the header name holding the recaptcha response
   * support customizing the body attribute name holding the recaptcha response
-  * support V3 recaptcha (experimental)
+  * support V3 recaptcha
   * support recaptcha on service or globally (experimental)
 
 ## License
